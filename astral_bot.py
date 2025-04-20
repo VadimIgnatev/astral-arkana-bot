@@ -5,6 +5,7 @@ import asyncio
 import logging
 from datetime import datetime
 import os
+import json
 from dotenv import load_dotenv
 
 # Включаем логирование
@@ -22,6 +23,12 @@ load_dotenv()
 
 # 🔐 Токен Telegram-бота
 BOT_TOKEN = os.getenv("BOT_TOKEN")
+
+# 🗝️ Подключение credentials.json через переменную окружения
+CREDENTIALS_JSON = os.getenv("CREDENTIALS_JSON")
+if CREDENTIALS_JSON:
+    with open("credentials.json", "w") as f:
+        f.write(CREDENTIALS_JSON)
 
 # ✅ Инициализация бота
 bot = Bot(token=BOT_TOKEN, parse_mode=ParseMode.MARKDOWN)
