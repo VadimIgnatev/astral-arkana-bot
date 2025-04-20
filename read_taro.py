@@ -28,9 +28,8 @@ if CREDENTIALS_JSON:
     with open("credentials.json", "w") as f:
         f.write(CREDENTIALS_JSON)
 
-# Импортируем только нужные функции и переменные из read_taro,
-# чтобы избежать кругового импорта
-from read_taro import get_random_cards, get_spread_text, data
+# Импортируем необходимые функции и данные
+from read_taro import data, get_random_cards, get_spread_text
 
 # ✅ Инициализация бота
 bot = Bot(token=BOT_TOKEN, parse_mode=ParseMode.MARKDOWN)
@@ -59,8 +58,6 @@ def get_post_spread_buttons(text_to_share=None):
     ])
 
 # Основная функция для генерации текста расклада
-# Вызывается извне
-
 def get_tarot_response(spread_type: str) -> str:
     cards = get_random_cards(spread_type)
     interpretation = get_spread_text(spread_type, cards)
@@ -129,7 +126,7 @@ async def start(message: Message):
 @dp.callback_query(F.data.startswith("spread:"))
 async def handle_spread_selection(callback: CallbackQuery):
     user_id = callback.from_user.id
-    spread_type = callback.data.split(":"[1])
+    spread_type = callback.data.split(":")[1]
     user_last_spread[user_id] = spread_type
 
     logging.info(f"Пользователь {user_id} выбрал расклад: {spread_type}")
