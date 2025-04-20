@@ -28,7 +28,9 @@ if CREDENTIALS_JSON:
     with open("credentials.json", "w") as f:
         f.write(CREDENTIALS_JSON)
 
-from tarot_logic import get_tarot_response
+# Импортируем только нужные функции и переменные из read_taro,
+# чтобы избежать кругового импорта
+from read_taro import get_random_cards, get_spread_text, data
 
 # ✅ Инициализация бота
 bot = Bot(token=BOT_TOKEN, parse_mode=ParseMode.MARKDOWN)
@@ -55,6 +57,14 @@ def get_post_spread_buttons(text_to_share=None):
         [InlineKeyboardButton(text="↩️ Назад к выбору", callback_data="back")],
         [InlineKeyboardButton(text="📤 Поделиться раскладом", switch_inline_query=text_to_share or "")]
     ])
+
+# Основная функция для генерации текста расклада
+# Вызывается извне
+
+def get_tarot_response(spread_type: str) -> str:
+    cards = get_random_cards(spread_type)
+    interpretation = get_spread_text(spread_type, cards)
+    return interpretation
 
 # Команда /help — инструкция
 @dp.message(F.text == "/help")
