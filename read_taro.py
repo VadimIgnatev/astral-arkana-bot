@@ -129,7 +129,7 @@ async def start(message: Message):
 @dp.callback_query(F.data.startswith("spread:"))
 async def handle_spread_selection(callback: CallbackQuery):
     user_id = callback.from_user.id
-    spread_type = callback.data.split(":")[1]
+    spread_type = callback.data.split(":"[1])
     user_last_spread[user_id] = spread_type
 
     logging.info(f"Пользователь {user_id} выбрал расклад: {spread_type}")
